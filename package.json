@@ -1,0 +1,26 @@
+{
+  "name": "manadata",
+  "version": "0.0.1",
+  "description": "like MongoDB for client",
+  "main": "manadata.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sonvn/manadata.git"
+  },
+  "keywords": [
+    "data",
+    "management"
+  ],
+  "author": "Sonvn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sonvn/manadata/issues"
+  },
+  "homepage": "https://github.com/Sonvn/manadata#readme",
+  "dependencies": {
+    "underscore": "^1.8.3"
+  }
+}
