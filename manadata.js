@@ -1,23 +1,36 @@
 var _ = require('underscore');
+var q = require('q');
 
 (function () {
     var root = this;
 
+    var indexOf = function (array, item) {
+        var index = _.findIndex(array, function (itemFormDatas) {
+            return _.isEqual(itemFormDatas, item);
+        });
+        return index;
+    };
+
+
     var _push = function (array, datas) {
-        array = Array.isArray(datas) ? array.concat(datas) : array.push(datas);
+        if (Array.isArray(datas)) {
+            array = array.concat(datas);
+        } else {
+            array.push(datas);
+        }
         return array;
     };
 
-    function createGroup(data, attrs) {
+    var createGroup = function (data, attrs) {
         var group = {};
         for (var i = 0; i < attrs.length; i++) {
             var attr = attrs[i];
             group[attr] = data[attr];
         }
         return group;
-    }
+    };
 
-    function isInGroup(data, group, attrs) {
+    var isInGroup = function (data, group, attrs) {
         for (var i = 0; i < attrs.length; i++) {
             var attr = attrs[i];
             if (data[attr] != group[attr]) {
@@ -25,7 +38,7 @@ var _ = require('underscore');
             }
         }
         return true;
-    }
+    };
 
     var groupBy = function (datas, attrs, func) {
         var groups = [];
@@ -62,7 +75,7 @@ var _ = require('underscore');
         this.rawData = this.datas = _push(this.datas, datas);
     };
 
-    ManaData.prototype.isEmpty = function() {
+    ManaData.prototype.isEmpty = function () {
         return this.datas == null || this.datas.length == 0;
     };
 
@@ -75,6 +88,7 @@ var _ = require('underscore');
         if (index != -1) {
             _.extendOwn(this.datas[index], options);
         }
+        return this.datas[index];
     };
 
     ManaData.prototype.deleteOne = function (item) {
@@ -89,8 +103,9 @@ var _ = require('underscore');
     ManaData.prototype.deleteBy = function (func) {
         for (var i = 0; i < this.datas.length; i++) {
             var obj = this.datas[i];
-            if(func(obj)) {
-                this.datas.splice(index, 1);
+            if (func(obj)) {
+                this.datas.splice(i, 1);
+                i--;
             }
         }
     };
@@ -127,11 +142,33 @@ var _ = require('underscore');
         }
     };
 
-    ManaData.prototype.exist = function (item) {
-        var index = _.findIndex(this.datas, function (itemFormDatas) {
-            return _.isEqual(itemFormDatas, item);
+    ManaData.prototype.filter = function (filterFunc) {
+        var result = [];
+        this.datas.forEach(function (item) {
+            if (filterFunc(item)) {
+                result.push(item);
+            }
         });
-        return index;
+        return result;
+    };
+
+    ManaData.prototype.unique = function () {
+        var result = [];
+        this.datas.forEach(function (item) {
+            if (indexOf(result, item) == -1) {
+                result.push(item);
+            }
+        });
+        return result;
+    };
+
+    ManaData.prototype.removeDuplicate = function () {
+        this.datas = this.unique();
+    };
+
+
+    ManaData.prototype.exist = function (item) {
+        return indexOf(this.datas, item);
     };
 
     ManaData.prototype.groupByKey = function (listKeys) {
@@ -167,6 +204,10 @@ var _ = require('underscore');
         });
 
         return result;
+    };
+
+    ManaData.prototype.listDataOfKeys = function (listKeys) {
+        return groupBy(this.datas, listKeys);
     };
 
 

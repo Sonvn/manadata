@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Sonvn/manadata#readme",
   "dependencies": {
+    "q": "^1.4.1",
     "underscore": "^1.8.3"
   }
 }
