@@ -1,5 +1,7 @@
-var _ = require('underscore');
-var q = require('q');
+if (typeof require !== "undefined") {
+    if (typeof underscore !== "undefined" && underscore === "underscore") {
+        var _ = require('underscore');
+}
 
 (function () {
     var root = this;
@@ -70,9 +72,10 @@ var q = require('q');
     };
 
     var ManaData = function (datas) {
-        this.rawData = [];
+        //this.rawData = [];
         this.datas = [];
-        this.rawData = this.datas = _push(this.datas, datas);
+        //this.rawData = _push(this.datas, datas);
+        this.datas = _push(this.datas, datas);
     };
 
     ManaData.prototype.isEmpty = function () {
@@ -210,7 +213,6 @@ var q = require('q');
         return groupBy(this.datas, listKeys);
     };
 
-
     //export
     if (typeof exports !== 'undefined') {
         if (typeof module !== 'undefined' && module.exports) {
@@ -219,6 +221,5 @@ var q = require('q');
     } else {
         root.manadata = ManaData;
     }
-})
-();
+})();
 
