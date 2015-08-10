@@ -62,33 +62,37 @@ var _ = require('underscore');
         this.rawData = this.datas = _push(this.datas, datas);
     };
 
-    ManaData.prototype.insert = function (datas, cb) {
-        this.datas = _push(this.datas, datas);
-        if (cb) {
-            cb();
-        }
+    ManaData.prototype.isEmpty = function() {
+        return this.datas == null || this.datas.length == 0;
     };
 
-    ManaData.prototype.update = function (item, func) {
+    ManaData.prototype.insert = function (datas) {
+        this.datas = _push(this.datas, datas);
+    };
+
+    ManaData.prototype.update = function (item, options) {
         var index = this.exist(item);
         if (index != -1) {
-            if(func) {
-                func(this.datas[index]);
-            }
+            _.extendOwn(this.datas[index], options);
         }
-        return this.datas;
     };
 
     ManaData.prototype.deleteOne = function (item) {
-
+        var index = this.exist(item);
+        if (index == -1) {
+            return false;
+        }
+        this.datas.splice(index, 1);
+        return true;
     };
 
-    ManaData.prototype.revert = function () {
-
-    };
-
-    ManaData.prototype.save = function () {
-
+    ManaData.prototype.deleteBy = function (func) {
+        for (var i = 0; i < this.datas.length; i++) {
+            var obj = this.datas[i];
+            if(func(obj)) {
+                this.datas.splice(index, 1);
+            }
+        }
     };
 
     ManaData.prototype.findByFunc = function (func) {
@@ -104,7 +108,7 @@ var _ = require('underscore');
     };
 
 
-    ManaData.prototype.findByProperty = function (findOptions, cb) {
+    ManaData.prototype.findByProperty = function (findOptions) {
         if (typeof findOptions == "undefined") {
             throw 'findOptions is undefined';
         } else {
@@ -119,9 +123,6 @@ var _ = require('underscore');
                 }
                 correct ? result.push(item) : '';
             });
-            if (cb) {
-                cb(result);
-            }
             return result;
         }
     };
