@@ -1,9 +1,10 @@
 if (typeof require !== "undefined") {
-    if (typeof underscore !== "undefined" && underscore === "underscore") {
-        var _ = require('underscore');
+    var _ = require('underscore');
 }
 
 (function () {
+
+
     var root = this;
 
     var indexOf = function (array, item) {
@@ -189,10 +190,21 @@ if (typeof require !== "undefined") {
 
     ManaData.prototype.countByKey = function (listKeys) {
         return groupBy(this.datas, listKeys, function (data, group) {
-            if (typeof group.sum == 'undefined') {
-                group.sum = 1;
+            if (typeof group.count == 'undefined') {
+                group.count = 1;
             } else {
-                group.sum++;
+                group.count++;
+            }
+        });
+    };
+
+    ManaData.prototype.sumByKey = function (listKeys, sumKey) {
+        var attr = 'sum_' + sumKey;
+        return groupBy(this.datas, listKeys, function (data, group) {
+            if (typeof group[attr] == 'undefined') {
+                group[attr] = data[sumKey];
+            } else {
+                group[attr] += data[sumKey];
             }
         });
     };

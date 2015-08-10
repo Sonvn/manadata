@@ -60,6 +60,10 @@ console.log(test2.isEqual(otherDatas2));
 console.log('test count by key');
 console.log(JSON.stringify(test2.countByKey(['n', 'c'])));
 
+console.log('test sum by key');
+console.log(test2.datas);
+console.log(JSON.stringify(test2.sumByKey('c', 'n')));
+
 console.log('test get value of key');
 console.log(JSON.stringify(test2.valuesOfOneKey('n')));
 
